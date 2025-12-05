@@ -45,10 +45,12 @@ const emit = defineEmits<{
 const cardClasses = computed(() => [
   props.small ? 'w-14 h-20' : 'w-20 h-28',
   {
-    'poker-card-selected': props.selected,
-    'poker-card-revealed': props.revealed,
+    'transform transition-all duration-200 ease-out': true,
+    'hover:-translate-y-1 hover:shadow-lg': !props.disabled && !props.revealed && !props.selected,
+    'ring-2 ring-primary-500 -translate-y-2 shadow-xl bg-primary-50': props.selected,
+    'bg-white shadow-md border border-secondary-200': !props.selected && !props.revealed,
+    'bg-secondary-100': props.revealed,
     'opacity-50 cursor-not-allowed': props.disabled,
-    'hover:scale-105': !props.disabled && !props.revealed,
   },
 ])
 
@@ -65,16 +67,19 @@ function handleClick(): void {
 <template>
   <button
     type="button"
-    class="poker-card flex items-center justify-center"
+    class="poker-card relative flex items-center justify-center rounded-xl select-none"
     :class="cardClasses"
     :disabled="disabled"
     :aria-pressed="selected"
     :aria-label="`Karte mit Wert ${value}`"
     @click="handleClick"
   >
+    <!-- Card Pattern/Decoration -->
+    <div class="absolute inset-2 border-2 border-dashed border-secondary-100 rounded-lg pointer-events-none" />
+
     <span
-      class="font-bold text-secondary-700"
-      :class="small ? 'text-lg' : 'text-2xl'"
+      class="font-bold text-secondary-800 z-10"
+      :class="small ? 'text-xl' : 'text-3xl'"
     >
       {{ value }}
     </span>

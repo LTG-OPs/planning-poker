@@ -38,72 +38,81 @@ const sortedParticipants = computed(() => {
 })
 
 /**
- * Ermittelt den Anzeigestatus für einen Teilnehmer
+ * Ermittelt das Icon für einen Teilnehmer
  */
-function getVoteStatus(participant: IParticipant): string {
-  if (participant.isObserver) return '👀'
-  if (participant.selectedValue === null) return '🤔'
-  if (props.revealed) return participant.selectedValue
-  return '✓'
+function getStatusIcon(participant: IParticipant): string {
+  if (participant.isObserver) return 'heroicons:eye'
+  if (participant.selectedValue === null) return 'heroicons:ellipsis-horizontal'
+  if (props.revealed) return '' // Wert wird direkt angezeigt
+  return 'heroicons:check'
 }
 
 /**
  * CSS-Klassen für den Vote-Badge
  */
 function getVoteBadgeClasses(participant: IParticipant): string[] {
-  const base = ['min-w-8 h-8 flex items-center justify-center rounded-lg font-medium text-sm']
+  const base = ['min-w-8 h-8 flex items-center justify-center rounded-lg font-medium text-sm transition-colors duration-200']
 
   if (participant.isObserver) {
     return [...base, 'bg-secondary-100 text-secondary-500']
   }
 
   if (participant.selectedValue === null) {
-    return [...base, 'bg-warning-100 text-warning-700']
+    return [...base, 'bg-amber-50 text-amber-600 animate-pulse']
   }
 
   if (props.revealed) {
-    return [...base, 'bg-primary-100 text-primary-700']
+    return [...base, 'bg-primary-100 text-primary-700 font-bold text-lg']
   }
 
-  return [...base, 'bg-success-100 text-success-700']
+  return [...base, 'bg-green-100 text-green-600']
 }
 </script>
 
 <template>
-  <div class="participant-list">
-    <h3 class="text-sm font-medium text-secondary-600 mb-3">
-      Teilnehmer ({{ participants.length }})
-    </h3>
+  <div class="participant-list bg-white rounded-xl shadow-sm border border-secondary-200 p-4">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-sm font-semibold text-secondary-700 uppercase tracking-wider">
+        Teilnehmer
+      </h3>
+      <span class="bg-secondary-100 text-secondary-600 text-xs font-medium px-2.5 py-0.5 rounded-full">
+        {{ participants.length }}
+      </span>
+    </div>
 
     <ul class="space-y-2">
       <li
         v-for="participant in sortedParticipants"
         :key="participant.id"
-        class="flex items-center justify-between p-2 rounded-lg bg-secondary-50"
-        :class="{ 'ring-2 ring-primary-300': participant.id === currentUserId }"
+        class="flex items-center justify-between p-3 rounded-lg transition-colors"
+        :class="[
+          participant.id === currentUserId ? 'bg-primary-50 border border-primary-100' : 'bg-secondary-50 hover:bg-secondary-100'
+        ]"
       >
-        <div class="flex items-center gap-2">
-          <span
-            class="w-8 h-8 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-medium"
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow-sm"
+            :class="participant.id === currentUserId ? 'bg-primary-500 text-white' : 'bg-white text-secondary-600 border border-secondary-200'"
           >
             {{ participant.name.charAt(0).toUpperCase() }}
-          </span>
-          <span class="font-medium text-secondary-800">
-            {{ participant.name }}
-            <span v-if="participant.id === currentUserId" class="text-xs text-secondary-500">
-              (Du)
+          </div>
+          <div class="flex flex-col">
+            <span class="font-medium text-sm text-secondary-900 leading-tight">
+              {{ participant.name }}
             </span>
-          </span>
+            <span v-if="participant.id === currentUserId" class="text-[10px] text-primary-600 font-medium">
+              Du
+            </span>
+          </div>
         </div>
 
-        <span :class="getVoteBadgeClasses(participant)">
-          {{ getVoteStatus(participant) }}
-        </span>
+        <div :class="getVoteBadgeClasses(participant)">
+          <template v-if="props.revealed && participant.selectedValue !== null">
+            {{ participant.selectedValue }}
+          </template>
+          <Icon v-else :name="getStatusIcon(participant)" class="w-5 h-5" />
+        </div>
       </li>
     </ul>
-
-    <div v-if="participants.length === 0" class="text-center py-4 text-secondary-400">
-      Noch keine Teilnehmer
-    </div>
   </div>
 </template>

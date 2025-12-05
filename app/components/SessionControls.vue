@@ -52,10 +52,15 @@ function handleStartVoting(): void {
 </script>
 
 <template>
-  <div v-if="props.isHost" class="session-controls card-container">
-    <h3 class="text-lg font-semibold text-secondary-800 mb-4">
-      Session-Steuerung
-    </h3>
+  <div v-if="props.isHost" class="session-controls bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
+    <div class="flex items-center gap-2 mb-4">
+      <div class="p-2 bg-primary-100 rounded-lg text-primary-600">
+        <Icon name="heroicons:adjustments-horizontal" class="w-5 h-5" />
+      </div>
+      <h3 class="text-lg font-bold text-secondary-900">
+        Steuerung
+      </h3>
+    </div>
 
     <!-- Neue Runde starten -->
     <div v-if="props.status === 'waiting' || props.status === 'revealed'" class="space-y-3">

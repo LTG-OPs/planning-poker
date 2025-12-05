@@ -66,35 +66,41 @@ const hasConsensus = computed(() => {
 </script>
 
 <template>
-  <div class="voting-result card-container">
-    <h3 class="text-lg font-semibold text-secondary-800 mb-4">
-      Ergebnis
-    </h3>
+  <div class="voting-result bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
+    <div class="flex items-center gap-2 mb-6">
+      <div class="p-2 bg-accent-100 rounded-lg text-accent-600">
+        <Icon name="heroicons:chart-bar" class="w-5 h-5" />
+      </div>
+      <h3 class="text-lg font-bold text-secondary-900">
+        Ergebnis
+      </h3>
+    </div>
 
     <!-- Konsens-Anzeige -->
     <div
       v-if="hasConsensus"
-      class="mb-4 p-3 bg-success-50 border border-success-200 rounded-lg text-center"
+      class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl text-center shadow-sm"
     >
-      <span class="text-success-700 font-medium">
-        🎉 Konsens erreicht!
+      <div class="text-3xl mb-2">🎉</div>
+      <span class="text-green-800 font-bold text-lg">
+        Konsens erreicht!
       </span>
     </div>
 
     <!-- Statistiken -->
-    <div class="grid grid-cols-2 gap-4 mb-4">
-      <div class="text-center p-3 bg-primary-50 rounded-lg">
-        <div class="text-2xl font-bold text-primary-700">
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="text-center p-4 bg-primary-50 rounded-xl border border-primary-100">
+        <div class="text-3xl font-bold text-primary-600 mb-1">
           {{ average ?? '-' }}
         </div>
-        <div class="text-xs text-primary-600">Durchschnitt</div>
+        <div class="text-xs font-medium text-primary-500 uppercase tracking-wider">Durchschnitt</div>
       </div>
 
-      <div class="text-center p-3 bg-secondary-50 rounded-lg">
-        <div class="text-2xl font-bold text-secondary-700">
+      <div class="text-center p-4 bg-secondary-50 rounded-xl border border-secondary-100">
+        <div class="text-3xl font-bold text-secondary-700 mb-1">
           {{ voters.length }}
         </div>
-        <div class="text-xs text-secondary-600">Stimmen</div>
+        <div class="text-xs font-medium text-secondary-500 uppercase tracking-wider">Stimmen</div>
       </div>
     </div>
 

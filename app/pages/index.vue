@@ -86,9 +86,9 @@ function switchMode(newMode: 'create' | 'join'): void {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-100">
+  <div class="min-h-screen flex flex-col">
     <!-- Header -->
-    <header class="bg-white shadow-sm">
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-secondary-200/50">
       <div class="container mx-auto px-4 py-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
@@ -188,7 +188,7 @@ function switchMode(newMode: 'create' | 'join'): void {
 
         <!-- Features -->
         <div class="grid md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
-          <div class="text-center p-6">
+          <div class="text-center p-6 bg-white rounded-xl shadow-sm border border-secondary-100 hover:shadow-md transition-shadow">
             <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Icon name="heroicons:users" class="w-6 h-6 text-primary-600" />
             </div>
@@ -198,7 +198,7 @@ function switchMode(newMode: 'create' | 'join'): void {
             </p>
           </div>
 
-          <div class="text-center p-6">
+          <div class="text-center p-6 bg-white rounded-xl shadow-sm border border-secondary-100 hover:shadow-md transition-shadow">
             <div class="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Icon name="heroicons:chart-bar" class="w-6 h-6 text-accent-600" />
             </div>
@@ -208,9 +208,9 @@ function switchMode(newMode: 'create' | 'join'): void {
             </p>
           </div>
 
-          <div class="text-center p-6">
-            <div class="w-12 h-12 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Icon name="heroicons:bolt" class="w-6 h-6 text-success-600" />
+          <div class="text-center p-6 bg-white rounded-xl shadow-sm border border-secondary-100 hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Icon name="heroicons:bolt" class="w-6 h-6 text-green-600" />
             </div>
             <h3 class="font-semibold text-secondary-800 mb-2">Schnell & Einfach</h3>
             <p class="text-sm text-secondary-600">

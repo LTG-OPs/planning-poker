@@ -19,6 +19,9 @@
 
   body {
     @apply bg-secondary-50 text-secondary-900 antialiased;
+    background-image: radial-gradient(circle at top right, #e0f2fe 0%, transparent 25%),
+                      radial-gradient(circle at bottom left, #f0f9ff 0%, transparent 25%);
+    background-attachment: fixed;
   }
 
   /**
@@ -96,7 +99,7 @@
    * Card-Container Styles
    */
   .card-container {
-    @apply bg-white rounded-xl shadow-md p-6 border border-secondary-100;
+    @apply bg-white rounded-xl shadow-sm p-6 border border-secondary-200;
   }
 }
 
