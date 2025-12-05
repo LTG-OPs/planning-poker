@@ -84,6 +84,8 @@ export interface ISession {
   name: string
   /** Aktuelle Story/Task die geschätzt wird */
   currentStory: string | null
+  /** Beschreibung der aktuellen Story (Markdown) */
+  currentStoryDescription: string | null
   /** Liste aller Teilnehmer */
   participants: IParticipant[]
   /** Aktueller Status der Session */
@@ -104,6 +106,8 @@ export interface ISession {
 export interface IVotingResult {
   /** Story die geschätzt wurde */
   story: string
+  /** Beschreibung der Story */
+  storyDescription: string | null
   /** Alle Votes mit Teilnehmer-ID */
   votes: Map<string, PokerValue>
   /** Durchschnittswert (nur numerische) */

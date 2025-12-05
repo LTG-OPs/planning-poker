@@ -5,6 +5,7 @@
  * Zeigt die Ergebnisse einer Abstimmungsrunde an.
  */
 
+import { marked } from 'marked';
 import type { IParticipant, PokerValue } from '~/types';
 
 /**
@@ -13,9 +14,21 @@ import type { IParticipant, PokerValue } from '~/types';
 interface Props {
   /** Liste der Teilnehmer mit ihren Votes */
   participants: IParticipant[]
+  /** Story die geschätzt wurde */
+  story?: string | null
+  /** Beschreibung der Story */
+  description?: string | null
 }
 
 const props = defineProps<Props>()
+
+/**
+ * Parsed Markdown Description
+ */
+const parsedDescription = computed(() => {
+  if (!props.description) return ''
+  return marked.parse(props.description) as string
+})
 
 /**
  * Nur Teilnehmer die abgestimmt haben (keine Beobachter)
@@ -89,13 +102,25 @@ const hasConsensus = computed(() => {
 
 <template>
   <div class="voting-result bg-white rounded-xl shadow-sm border border-secondary-200 p-6">
-    <div class="flex items-center gap-2 mb-6">
-      <div class="p-2 bg-accent-100 rounded-lg text-accent-600">
-        <Icon name="heroicons:chart-bar" class="w-5 h-5" />
+    <div class="flex items-center gap-2 mb-4">
+      <div class="p-2 bg-primary-100 rounded-lg text-primary-600">
+        <Icon name="heroicons:chart-pie" class="w-5 h-5" />
       </div>
       <h3 class="text-lg font-bold text-secondary-900">
         Ergebnis
       </h3>
+    </div>
+
+    <!-- Story Info -->
+    <div v-if="story" class="mb-6 p-4 bg-white border border-secondary-200 rounded-xl shadow-sm">
+      <div class="text-xs text-secondary-500 mb-1">Abstimmung für</div>
+      <h3 class="text-lg font-bold text-secondary-800 mb-2">{{ story }}</h3>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div
+        v-if="description"
+        class="prose prose-sm max-w-none text-secondary-600 bg-secondary-50 p-3 rounded-lg"
+        v-html="parsedDescription"
+      />
     </div>
 
     <!-- Konsens-Anzeige -->

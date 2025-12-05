@@ -251,7 +251,7 @@ function handleResetVoting(peer: Peer): void {
  * Startet eine neue Voting-Runde
  */
 function handleStartVoting(peer: Peer, payload: StartVotingPayload): void {
-  const session = sessionStore.startVoting(peer, payload.story)
+  const session = sessionStore.startVoting(peer, payload.story, payload.description)
 
   if (!session) {
     sendMessage(peer, 'session:error', {

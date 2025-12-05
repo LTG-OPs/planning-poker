@@ -33,6 +33,7 @@ export class Session implements ISession {
   public readonly id: string
   public name: string
   public currentStory: string | null
+  public currentStoryDescription: string | null
   public participants: Participant[]
   public status: SessionStatus
   public cardsRevealed: boolean
@@ -55,6 +56,7 @@ export class Session implements ISession {
     this.name = name.trim()
     this.hostId = hostId
     this.currentStory = null
+    this.currentStoryDescription = null
     this.participants = []
     this.status = 'waiting'
     this.cardsRevealed = false
@@ -111,9 +113,11 @@ export class Session implements ISession {
    * Startet eine neue Abstimmungsrunde
    *
    * @param story - Die zu schätzende Story
+   * @param description - Optional: Beschreibung der Story
    */
-  public startVoting(story: string): void {
+  public startVoting(story: string, description?: string): void {
     this.currentStory = story.trim()
+    this.currentStoryDescription = description?.trim() || null
     this.status = 'voting'
     this.cardsRevealed = false
 
@@ -208,6 +212,7 @@ export class Session implements ISession {
 
     return {
       story: this.currentStory!,
+      storyDescription: this.currentStoryDescription,
       votes,
       average,
       median,
@@ -288,6 +293,7 @@ export class Session implements ISession {
       id: this.id,
       name: this.name,
       currentStory: this.currentStory,
+      currentStoryDescription: this.currentStoryDescription,
       participants: this.participants.map(p => p.toJSON()),
       status: this.status,
       cardsRevealed: this.cardsRevealed,

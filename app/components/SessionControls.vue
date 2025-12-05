@@ -28,7 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
  */
 const emit = defineEmits<{
   /** Startet eine neue Abstimmungsrunde */
-  startVoting: [story: string]
+  startVoting: [story: string, description?: string]
   /** Deckt die Karten auf */
   reveal: []
   /** Setzt die Runde zurück */
@@ -39,14 +39,16 @@ const emit = defineEmits<{
  * Story-Input Wert
  */
 const storyInput = ref('')
+const descriptionInput = ref('')
 
 /**
  * Startet die Abstimmung
  */
 function handleStartVoting(): void {
   if (storyInput.value.trim()) {
-    emit('startVoting', storyInput.value.trim())
+    emit('startVoting', storyInput.value.trim(), descriptionInput.value.trim())
     storyInput.value = ''
+    descriptionInput.value = ''
   }
 }
 </script>
@@ -76,6 +78,18 @@ function handleStartVoting(): void {
           placeholder="z.B. User Story #123"
           @keyup.enter="handleStartVoting"
         >
+      </div>
+
+      <div>
+        <label for="story-desc" class="block text-sm font-medium text-secondary-700 mb-1">
+          Beschreibung (Markdown)
+        </label>
+        <textarea
+          id="story-desc"
+          v-model="descriptionInput"
+          class="input min-h-[100px] resize-y"
+          placeholder="Details zur Story..."
+        />
       </div>
 
       <button

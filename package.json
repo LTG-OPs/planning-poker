@@ -19,7 +19,9 @@
     "@nuxt/icon": "2.1.0",
     "@nuxt/image": "2.0.0",
     "@nuxt/scripts": "0.13.0",
+    "@types/marked": "^6.0.0",
     "better-sqlite3": "^12.5.0",
+    "marked": "^17.0.1",
     "nuxt": "^4.2.1"
   },
   "devDependencies": {

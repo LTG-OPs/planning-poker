@@ -87,6 +87,7 @@ export interface ResetVotingPayload {
 export interface StartVotingPayload {
   sessionId: string
   story: string
+  description?: string
 }
 
 // ============================================

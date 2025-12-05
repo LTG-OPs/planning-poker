@@ -6,6 +6,8 @@
  * Ermöglicht das Erstellen einer neuen Session oder zeigt die aktive Session.
  */
 
+import { marked } from 'marked'
+
 /**
  * Session Composable für Zustandsverwaltung
  */
@@ -27,6 +29,14 @@ const {
   leaveSession,
   clearError,
 } = useSession()
+
+/**
+ * Parsed Markdown Description
+ */
+const parsedDescription = computed(() => {
+  if (!session.value?.currentStoryDescription) return ''
+  return marked.parse(session.value.currentStoryDescription) as string
+})
 
 /**
  * Route für Join-Code aus URL
@@ -250,60 +260,76 @@ function switchMode(newMode: 'create' | 'join'): void {
         </div>
 
         <!-- Mittlere Spalte: Hauptbereich -->
+                <!-- Mittlere Spalte: Hauptbereich -->
         <div class="lg:col-span-6">
-          <!-- Aktuelle Story -->
-          <div v-if="session.currentStory" class="card-container mb-6">
-            <div class="text-xs text-secondary-500 mb-1">Aktuelle Story</div>
-            <h2 class="text-xl font-bold text-secondary-800">
-              {{ session.currentStory }}
-            </h2>
-          </div>
+          <Transition name="slide-up" mode="out-in">
+            <!-- Aktuelle Story -->
+            <div v-if="session.currentStory" class="card-container mb-6">
+              <div class="text-xs text-secondary-500 mb-1">Aktuelle Story</div>
+              <h2 class="text-xl font-bold text-secondary-800 mb-2">
+                {{ session.currentStory }}
+              </h2>
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <div
+                v-if="session.currentStoryDescription"
+                class="prose prose-sm max-w-none text-secondary-600 bg-secondary-50 p-3 rounded-lg"
+                v-html="parsedDescription"
+              />
+            </div>
 
-          <!-- Warte-Status -->
-          <div v-else class="card-container mb-6 text-center py-8">
-            <Icon name="heroicons:clock" class="w-12 h-12 text-secondary-300 mx-auto mb-4" />
-            <p class="text-secondary-500">
-              Warte auf den Host, um die nächste Runde zu starten...
-            </p>
-          </div>
+            <!-- Warte-Status -->
+            <div v-else class="card-container mb-6 text-center py-8">
+              <Icon name="heroicons:clock" class="w-12 h-12 text-secondary-300 mx-auto mb-4" />
+              <p class="text-secondary-500">
+                Warte auf den Host, um die nächste Runde zu starten...
+              </p>
+            </div>
+          </Transition>
 
-          <!-- Kartenauswahl -->
-          <div
-            v-if="session.status === 'voting' && !currentParticipant?.isObserver"
-            class="card-container"
-          >
-            <CardDeck
-              :selected-value="currentParticipant?.selectedValue ?? null"
-              :disabled="session.cardsRevealed"
-              @select="selectCard"
-            />
-          </div>
+          <Transition name="slide-up" mode="out-in">
+            <!-- Kartenauswahl -->
+            <div
+              v-if="session.status === 'voting' && !currentParticipant?.isObserver"
+              class="card-container"
+            >
+              <CardDeck
+                :selected-value="currentParticipant?.selectedValue ?? null"
+                :disabled="session.cardsRevealed"
+                @select="selectCard"
+              />
+            </div>
 
-          <!-- Beobachter-Hinweis -->
-          <div
-            v-else-if="currentParticipant?.isObserver"
-            class="card-container text-center py-8"
-          >
-            <Icon name="heroicons:eye" class="w-12 h-12 text-secondary-300 mx-auto mb-4" />
-            <p class="text-secondary-500">
-              Du bist als Beobachter dabei und kannst nicht abstimmen.
-            </p>
-          </div>
+            <!-- Beobachter-Hinweis -->
+            <div
+              v-else-if="currentParticipant?.isObserver"
+              class="card-container text-center py-8"
+            >
+              <Icon name="heroicons:eye" class="w-12 h-12 text-secondary-300 mx-auto mb-4" />
+              <p class="text-secondary-500">
+                Du bist als Beobachter dabei und kannst nicht abstimmen.
+              </p>
+            </div>
+          </Transition>
         </div>
 
         <!-- Rechte Spalte: Ergebnisse -->
         <div class="lg:col-span-3">
-          <VotingResult
-            v-if="session.cardsRevealed"
-            :participants="voters"
-          />
+          <Transition name="slide-up" mode="out-in">
+            <div v-if="session.cardsRevealed">
+              <VotingResult
+                :participants="voters"
+                :story="session.currentStory"
+                :description="session.currentStoryDescription"
+              />
+            </div>
 
-          <div v-else class="card-container text-center py-8">
-            <Icon name="heroicons:eye-slash" class="w-12 h-12 text-secondary-300 mx-auto mb-4" />
-            <p class="text-secondary-500">
-              Die Ergebnisse werden angezeigt, sobald die Karten aufgedeckt sind.
-            </p>
-          </div>
+            <div v-else class="card-container text-center py-8">
+              <Icon name="heroicons:eye-slash" class="w-12 h-12 text-secondary-300 mx-auto mb-4" />
+              <p class="text-secondary-500">
+                Die Ergebnisse werden angezeigt, sobald die Karten aufgedeckt sind.
+              </p>
+            </div>
+          </Transition>
         </div>
       </div>
     </main>

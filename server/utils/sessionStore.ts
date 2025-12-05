@@ -85,6 +85,7 @@ class SessionStore {
       id: sessionId,
       name,
       currentStory: null,
+      currentStoryDescription: null,
       participants: [participant],
       status: 'waiting',
       cardsRevealed: false,
@@ -260,6 +261,7 @@ class SessionStore {
     managed.session.cardsRevealed = false
     managed.session.status = 'waiting'
     managed.session.currentStory = null
+    managed.session.currentStoryDescription = null
     managed.session.participants.forEach((p) => {
       p.selectedValue = null
     })
@@ -272,7 +274,7 @@ class SessionStore {
   /**
    * Startet eine neue Abstimmungsrunde
    */
-  startVoting(peer: Peer, story: string): ISession | null {
+  startVoting(peer: Peer, story: string, description?: string): ISession | null {
     const participantId = this.peerToParticipant.get(peer)
     if (!participantId) return null
 
@@ -286,6 +288,7 @@ class SessionStore {
     if (managed.session.hostId !== participantId) return null
 
     managed.session.currentStory = story
+    managed.session.currentStoryDescription = description || null
     managed.session.status = 'voting'
     managed.session.cardsRevealed = false
     managed.session.participants.forEach((p) => {
