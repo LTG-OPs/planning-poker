@@ -17,6 +17,43 @@ export const POKER_VALUES = ['0', '0.5', '1', '2', '3', '5', '8', '13', '21', '3
 export type PokerValue = typeof POKER_VALUES[number]
 
 /**
+ * Join-Code Konstanten
+ */
+export const JOIN_CODE_LENGTH = 6
+export const JOIN_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // Ohne verwechselbare Zeichen
+
+/**
+ * Prüft ob ein Wert ein gültiger PokerValue ist
+ *
+ * @param value - Zu prüfender Wert
+ */
+export function isValidPokerValue(value: unknown): value is PokerValue {
+  return typeof value === 'string' && (POKER_VALUES as readonly string[]).includes(value)
+}
+
+/**
+ * Prüft ob ein Join-Code gültig formatiert ist
+ *
+ * @param code - Zu prüfender Code
+ */
+export function isValidJoinCode(code: string): boolean {
+  if (code.length !== JOIN_CODE_LENGTH) return false
+  return code.split('').every(char => JOIN_CODE_CHARS.includes(char))
+}
+
+/**
+ * Formatiert einen Join-Code (Großbuchstaben, nur erlaubte Zeichen)
+ *
+ * @param code - Eingegebener Code
+ */
+export function formatJoinCode(code: string): string {
+  return code
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, '')
+    .slice(0, JOIN_CODE_LENGTH)
+}
+
+/**
  * Repräsentiert einen Teilnehmer in einer Session
  */
 export interface IParticipant {

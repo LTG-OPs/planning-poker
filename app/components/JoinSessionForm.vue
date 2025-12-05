@@ -5,6 +5,8 @@
  * Formular zum Beitreten einer bestehenden Planning Poker Session.
  */
 
+import { formatJoinCode, JOIN_CODE_LENGTH } from '~/types/poker';
+
 /**
  * Props Definition
  */
@@ -54,11 +56,7 @@ watch(() => props.initialCode, (newCode) => {
 const formattedJoinCode = computed({
   get: () => joinCode.value,
   set: (value: string) => {
-    // Nur erlaubte Zeichen, max 6 Zeichen
-    joinCode.value = value
-      .toUpperCase()
-      .replace(/[^A-Z0-9]/g, '')
-      .slice(0, 6)
+    joinCode.value = formatJoinCode(value)
   },
 })
 
@@ -66,7 +64,7 @@ const formattedJoinCode = computed({
  * Validierung
  */
 const isValid = computed(() =>
-  joinCode.value.trim().length === 6 &&
+  joinCode.value.trim().length === JOIN_CODE_LENGTH &&
   participantName.value.trim().length > 0
 )
 

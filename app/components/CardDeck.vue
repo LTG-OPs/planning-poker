@@ -20,14 +20,11 @@ interface Props {
   disabled?: boolean
 }
 
-const _props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   selectedValue: null,
   values: () => POKER_VALUES,
   disabled: false,
 })
-
-// Props für Template-Nutzung
-const { selectedValue, values, disabled } = _props
 
 /**
  * Events Definition
@@ -53,11 +50,11 @@ function handleSelect(value: PokerValue): void {
 
     <div class="flex flex-wrap gap-2 justify-center">
       <PokerCard
-        v-for="value in values"
+        v-for="value in props.values"
         :key="value"
         :value="value"
-        :selected="selectedValue === value"
-        :disabled="disabled"
+        :selected="props.selectedValue === value"
+        :disabled="props.disabled"
         @select="handleSelect"
       />
     </div>

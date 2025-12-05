@@ -53,6 +53,31 @@ export function useSession() {
   }))
 
   /**
+   * Warte auf Verbindung falls noch nicht verbunden
+   */
+  async function ensureConnected(): Promise<boolean> {
+    if (connectionStatus.value === 'connected') return true
+
+    connect()
+
+    // Warte max 5 Sekunden auf Verbindung
+    return new Promise((resolve) => {
+      const timeout = setTimeout(() => resolve(false), 5000)
+      const unwatch = watch(connectionStatus, (status) => {
+        if (status === 'connected') {
+          clearTimeout(timeout)
+          unwatch()
+          resolve(true)
+        } else if (status === 'error') {
+          clearTimeout(timeout)
+          unwatch()
+          resolve(false)
+        }
+      })
+    })
+  }
+
+  /**
    * WebSocket Event Handler registrieren
    */
   if (import.meta.client) {
@@ -218,15 +243,29 @@ export function useSession() {
    * @param sessionName - Name der Session
    * @param participantName - Name des Hosts
    */
-  function createSession(sessionName: string, participantName: string): void {
+  async function createSession(sessionName: string, participantName: string): Promise<void> {
+    // Validierung
+    if (!sessionName.trim() || !participantName.trim()) {
+      state.value = {
+        ...state.value,
+        error: 'Bitte fülle alle Felder aus.',
+      }
+      return
+    }
+
     // Sicherstellen dass WebSocket verbunden ist
-    if (connectionStatus.value !== 'connected') {
-      connect()
+    const connected = await ensureConnected()
+    if (!connected) {
+      state.value = {
+        ...state.value,
+        error: 'Verbindung zum Server konnte nicht hergestellt werden.',
+      }
+      return
     }
 
     send('session:create', {
-      sessionName,
-      participantName,
+      sessionName: sessionName.trim(),
+      participantName: participantName.trim(),
     })
   }
 
@@ -237,15 +276,38 @@ export function useSession() {
    * @param participantName - Name des Teilnehmers
    * @param asObserver - Als Beobachter beitreten
    */
-  function joinSession(code: string, participantName: string, asObserver = false): void {
+  async function joinSession(code: string, participantName: string, asObserver = false): Promise<void> {
+    // Validierung
+    const normalizedCode = code.toUpperCase().trim()
+    if (normalizedCode.length !== 6) {
+      state.value = {
+        ...state.value,
+        error: 'Der Join-Code muss 6 Zeichen lang sein.',
+      }
+      return
+    }
+
+    if (!participantName.trim()) {
+      state.value = {
+        ...state.value,
+        error: 'Bitte gib deinen Namen ein.',
+      }
+      return
+    }
+
     // Sicherstellen dass WebSocket verbunden ist
-    if (connectionStatus.value !== 'connected') {
-      connect()
+    const connected = await ensureConnected()
+    if (!connected) {
+      state.value = {
+        ...state.value,
+        error: 'Verbindung zum Server konnte nicht hergestellt werden.',
+      }
+      return
     }
 
     send('session:join', {
-      joinCode: code.toUpperCase().trim(),
-      participantName,
+      joinCode: normalizedCode,
+      participantName: participantName.trim(),
       asObserver,
     })
   }

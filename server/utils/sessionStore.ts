@@ -7,6 +7,7 @@
 
 import type { Peer } from 'crossws'
 import type { IParticipant, ISession, PokerValue } from '../../app/types/poker'
+import { JOIN_CODE_CHARS, JOIN_CODE_LENGTH } from '../../app/types/poker'
 
 /**
  * Session mit zugehörigen WebSocket-Verbindungen
@@ -26,13 +27,12 @@ function generateId(): string {
 }
 
 /**
- * Generiert einen 6-stelligen Join-Code
+ * Generiert einen Join-Code basierend auf den definierten Konstanten
  */
 function generateJoinCode(): string {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
   let code = ''
-  for (let i = 0; i < 6; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length))
+  for (let i = 0; i < JOIN_CODE_LENGTH; i++) {
+    code += JOIN_CODE_CHARS.charAt(Math.floor(Math.random() * JOIN_CODE_CHARS.length))
   }
   return code
 }

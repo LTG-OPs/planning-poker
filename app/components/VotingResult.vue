@@ -39,6 +39,28 @@ const average = computed(() => {
 })
 
 /**
+ * Berechnet den Median der numerischen Votes
+ */
+const median = computed(() => {
+  const numericVotes = voters.value
+    .map(p => Number.parseFloat(p.selectedValue as string))
+    .filter(v => !Number.isNaN(v))
+    .sort((a, b) => a - b)
+
+  if (numericVotes.length === 0) return null
+
+  const mid = Math.floor(numericVotes.length / 2)
+  if (numericVotes.length % 2 !== 0) {
+    return numericVotes[mid]?.toFixed(1) ?? null
+  }
+
+  const left = numericVotes[mid - 1]
+  const right = numericVotes[mid]
+  if (left === undefined || right === undefined) return null
+  return ((left + right) / 2).toFixed(1)
+})
+
+/**
  * Gruppiert Votes nach Wert für die Anzeige
  */
 const voteDistribution = computed(() => {
@@ -88,19 +110,26 @@ const hasConsensus = computed(() => {
     </div>
 
     <!-- Statistiken -->
-    <div class="grid grid-cols-2 gap-4 mb-6">
-      <div class="text-center p-4 bg-primary-50 rounded-xl border border-primary-100">
-        <div class="text-3xl font-bold text-primary-600 mb-1">
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="text-center p-3 bg-primary-50 rounded-xl border border-primary-100">
+        <div class="text-2xl font-bold text-primary-600 mb-0.5">
           {{ average ?? '-' }}
         </div>
-        <div class="text-xs font-medium text-primary-500 uppercase tracking-wider">Durchschnitt</div>
+        <div class="text-[10px] font-medium text-primary-500 uppercase tracking-wider">Durchschnitt</div>
       </div>
 
-      <div class="text-center p-4 bg-secondary-50 rounded-xl border border-secondary-100">
-        <div class="text-3xl font-bold text-secondary-700 mb-1">
+      <div class="text-center p-3 bg-accent-50 rounded-xl border border-accent-100">
+        <div class="text-2xl font-bold text-accent-600 mb-0.5">
+          {{ median ?? '-' }}
+        </div>
+        <div class="text-[10px] font-medium text-accent-500 uppercase tracking-wider">Median</div>
+      </div>
+
+      <div class="text-center p-3 bg-secondary-50 rounded-xl border border-secondary-100">
+        <div class="text-2xl font-bold text-secondary-700 mb-0.5">
           {{ voters.length }}
         </div>
-        <div class="text-xs font-medium text-secondary-500 uppercase tracking-wider">Stimmen</div>
+        <div class="text-[10px] font-medium text-secondary-500 uppercase tracking-wider">Stimmen</div>
       </div>
     </div>
 

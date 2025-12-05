@@ -6,6 +6,7 @@
  */
 
 import type { ISession, ISessionConfig } from '~/types'
+import { JOIN_CODE_CHARS, JOIN_CODE_LENGTH } from '~/types'
 import { Participant } from './Participant'
 import { Session } from './Session'
 
@@ -102,10 +103,9 @@ export class SessionManager {
    * Generiert einen kurzen, lesbaren Join-Code
    */
   private generateJoinCode(): string {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // Ohne verwechselbare Zeichen
     let code = ''
-    for (let i = 0; i < 6; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length))
+    for (let i = 0; i < JOIN_CODE_LENGTH; i++) {
+      code += JOIN_CODE_CHARS.charAt(Math.floor(Math.random() * JOIN_CODE_CHARS.length))
     }
 
     // Sicherstellen, dass Code einzigartig ist
