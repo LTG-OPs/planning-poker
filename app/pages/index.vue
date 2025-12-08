@@ -41,7 +41,7 @@ const {
  */
 const parsedDescription = computed(() => {
   if (!session.value?.currentStoryDescription) return ''
-  const rawHtml = marked.parse(session.value.currentStoryDescription) as string
+  const rawHtml = marked.parse(session.value.currentStoryDescription, { async: false }) as string
   return DOMPurify.sanitize(rawHtml)
 })
 
