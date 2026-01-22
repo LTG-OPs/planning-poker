@@ -14,9 +14,9 @@ import type {
   ISessionStats,
   IStoryStats,
   ITimeSeriesPoint,
-  IVoteDistribution,
 } from '~/types/stats'
 import { DEFAULT_STATS_STORAGE, STATS_STORAGE_KEY } from '~/types/stats'
+import { createStoryStats as createStoryStatsCore } from '~/utils/statsCalculations'
 
 /**
  * Composable for managing local statistics
@@ -98,53 +98,12 @@ export function useLocalStats() {
 
     const sessionStats = getOrCreateSessionStats(session, joinCode)
 
-    // Calculate distribution
-    const voteCounts = new Map<PokerValue, number>()
-    const numericValues: number[] = []
-
-    voters.forEach((voter) => {
-      if (voter.selectedValue !== null) {
-        const value = voter.selectedValue
-        voteCounts.set(value, (voteCounts.get(value) || 0) + 1)
-
-        const numValue = Number.parseFloat(value)
-        if (!Number.isNaN(numValue)) {
-          numericValues.push(numValue)
-        }
-      }
-    })
-
-    const totalVotes = voters.filter(v => v.selectedValue !== null).length
-    const distribution: IVoteDistribution[] = Array.from(voteCounts.entries())
-      .map(([value, count]) => ({
-        value,
-        count,
-        percentage: totalVotes > 0 ? (count / totalVotes) * 100 : 0,
-      }))
-      .sort((a, b) => b.count - a.count)
-
-    // Calculate statistics
-    const average = numericValues.length > 0
-      ? numericValues.reduce((a, b) => a + b, 0) / numericValues.length
-      : null
-
-    const median = calculateMedian(numericValues)
-    const mode = distribution.length > 0 ? distribution[0]?.value ?? null : null
-    const hasConsensus = distribution.length === 1 && totalVotes > 1
-
-    const storyStats: IStoryStats = {
-      id: crypto.randomUUID(),
-      story: session.currentStory,
-      storyDescription: session.currentStoryDescription,
-      timestamp: new Date(),
-      voterCount: totalVotes,
-      average,
-      median,
-      mode,
-      hasConsensus,
-      distribution,
-      finalEstimate: mode, // Default to mode
-    }
+    // Use extracted pure function for calculations
+    const storyStats = createStoryStatsCore(
+      session.currentStory,
+      session.currentStoryDescription,
+      voters,
+    )
 
     // Check if this story was already recorded (avoid duplicates)
     const existingIndex = sessionStats.history.findIndex(
@@ -159,25 +118,6 @@ export function useLocalStats() {
     }
 
     return storyStats
-  }
-
-  /**
-   * Calculate median of numeric values
-   */
-  function calculateMedian(values: number[]): number | null {
-    if (values.length === 0) return null
-
-    const sorted = [...values].sort((a, b) => a - b)
-    const mid = Math.floor(sorted.length / 2)
-
-    if (sorted.length % 2 !== 0) {
-      return sorted[mid] ?? null
-    }
-
-    const left = sorted[mid - 1]
-    const right = sorted[mid]
-    if (left === undefined || right === undefined) return null
-    return (left + right) / 2
   }
 
   /**
