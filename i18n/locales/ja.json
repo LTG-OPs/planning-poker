@@ -183,6 +183,20 @@
       "veryHigh": "非常に高い",
       "unknown": "不明"
     },
+    "efforts": {
+      "minimal": "最小",
+      "verySmall": "非常に小さい",
+      "small": "小さい",
+      "halfDay": "半日",
+      "oneToTwoDays": "1-2日",
+      "twoToThreeDays": "2-3日",
+      "threeToFiveDays": "3-5日",
+      "oneWeek": "1週間",
+      "oneToTwoWeeks": "1-2週間",
+      "epic": "エピック",
+      "unknown": "不明",
+      "break": "休憩"
+    },
     "examples": {
       "0": {
         "example1": {

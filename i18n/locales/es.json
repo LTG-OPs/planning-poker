@@ -183,6 +183,20 @@
       "veryHigh": "Muy alto",
       "unknown": "Desconocido"
     },
+    "efforts": {
+      "minimal": "Mínimo",
+      "verySmall": "Muy pequeño",
+      "small": "Pequeño",
+      "halfDay": "Medio día",
+      "oneToTwoDays": "1-2 días",
+      "twoToThreeDays": "2-3 días",
+      "threeToFiveDays": "3-5 días",
+      "oneWeek": "1 semana",
+      "oneToTwoWeeks": "1-2 semanas",
+      "epic": "Epic",
+      "unknown": "Desconocido",
+      "break": "Descanso"
+    },
     "examples": {
       "0": {
         "example1": {

@@ -183,6 +183,20 @@
       "veryHigh": "Zeer hoog",
       "unknown": "Onbekend"
     },
+    "efforts": {
+      "minimal": "Minimaal",
+      "verySmall": "Zeer klein",
+      "small": "Klein",
+      "halfDay": "Halve dag",
+      "oneToTwoDays": "1-2 dagen",
+      "twoToThreeDays": "2-3 dagen",
+      "threeToFiveDays": "3-5 dagen",
+      "oneWeek": "1 week",
+      "oneToTwoWeeks": "1-2 weken",
+      "epic": "Epic",
+      "unknown": "Onbekend",
+      "break": "Pauze"
+    },
     "examples": {
       "0": {
         "example1": {
