@@ -359,6 +359,9 @@
   "integration": {
     "settings": "Integrations",
     "generalSettings": "Settings",
+    "configured": "Configured",
+    "localStorageHint": "All settings are stored locally in your browser.",
+    "settingsSaved": "Settings saved",
     "connected": "Connected",
     "disconnect": "Disconnect",
     "connectJira": "Connect to Jira",

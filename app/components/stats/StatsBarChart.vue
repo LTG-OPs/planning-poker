@@ -5,16 +5,16 @@
  * Bar chart for card value frequency using Chart.js.
  */
 
-import {
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Legend,
-    LinearScale,
-    Title,
-    Tooltip,
-} from 'chart.js'
 import { Bar } from 'vue-chartjs'
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip,
+} from 'chart.js'
 import type { ICardFrequency } from '~/types/stats'
 
 // Register Chart.js components

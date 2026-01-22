@@ -7,14 +7,14 @@
 
 import type { IParticipant, ISession, PokerValue } from '~/types'
 import type {
-    ICardFrequency,
-    ILocalStatsStorage,
-    IMeetingStatus,
-    IQuickStats,
-    ISessionStats,
-    IStoryStats,
-    ITimeSeriesPoint,
-    IVoteDistribution,
+  ICardFrequency,
+  ILocalStatsStorage,
+  IMeetingStatus,
+  IQuickStats,
+  ISessionStats,
+  IStoryStats,
+  ITimeSeriesPoint,
+  IVoteDistribution,
 } from '~/types/stats'
 import { DEFAULT_STATS_STORAGE, STATS_STORAGE_KEY } from '~/types/stats'
 

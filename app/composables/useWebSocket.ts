@@ -67,6 +67,16 @@ interface UseWebSocketReturn {
  * send('session:create', { sessionName: 'Sprint 1', participantName: 'Max' })
  * ```
  */
+
+// Global singleton state for WebSocket - persists across page navigations
+let globalWs: WebSocket | null = null
+let globalReconnectAttempts = 0
+let globalReconnectTimer: ReturnType<typeof setTimeout> | null = null
+let globalPingInterval: ReturnType<typeof setInterval> | null = null
+const globalHandlers = new Map<ServerMessageType, Set<MessageHandler>>()
+const globalStatus = ref<ConnectionStatus>('disconnected')
+let isInitialized = false
+
 export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketReturn {
   const {
     autoConnect = true,
@@ -75,23 +85,11 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     reconnectDelay = 1000,
   } = options
 
-  /** WebSocket instance */
-  let ws: WebSocket | null = null
+  /** Use global status */
+  const status = globalStatus
 
-  /** Reconnect attempts */
-  let reconnectAttempts = 0
-
-  /** Reconnect timer */
-  let reconnectTimer: ReturnType<typeof setTimeout> | null = null
-
-  /** Ping interval */
-  let pingInterval: ReturnType<typeof setInterval> | null = null
-
-  /** Connection status */
-  const status = ref<ConnectionStatus>('disconnected')
-
-  /** Event handler map */
-  const handlers = new Map<ServerMessageType, Set<MessageHandler>>()
+  /** Use global handlers */
+  const handlers = globalHandlers
 
   /**
    * Generate WebSocket URL
@@ -118,27 +116,27 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
    */
   function connect(): void {
     if (!import.meta.client) return
-    if (ws?.readyState === WebSocket.OPEN) return
+    if (globalWs?.readyState === WebSocket.OPEN) return
 
     status.value = 'connecting'
 
     try {
-      ws = new WebSocket(getWebSocketUrl())
+      globalWs = new WebSocket(getWebSocketUrl())
 
-      ws.onopen = () => {
+      globalWs.onopen = () => {
         status.value = 'connected'
-        reconnectAttempts = 0
+        globalReconnectAttempts = 0
         console.log('[WebSocket] Connected')
 
         // Start ping interval
-        pingInterval = setInterval(() => {
-          if (ws?.readyState === WebSocket.OPEN) {
+        globalPingInterval = setInterval(() => {
+          if (globalWs?.readyState === WebSocket.OPEN) {
             send('ping', {})
           }
         }, 30000)
       }
 
-      ws.onmessage = (event) => {
+      globalWs.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data) as ServerMessage
           emitEvent(message.type, message.payload)
@@ -148,24 +146,24 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
         }
       }
 
-      ws.onclose = () => {
+      globalWs.onclose = () => {
         status.value = 'disconnected'
         cleanup()
         console.log('[WebSocket] Disconnected')
 
         // Auto-Reconnect
-        if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
-          reconnectAttempts++
-          const delay = reconnectDelay * Math.pow(2, reconnectAttempts - 1)
-          console.log(`[WebSocket] Reconnecting in ${delay}ms (attempt ${reconnectAttempts}/${maxReconnectAttempts})`)
+        if (autoReconnect && globalReconnectAttempts < maxReconnectAttempts) {
+          globalReconnectAttempts++
+          const delay = reconnectDelay * Math.pow(2, globalReconnectAttempts - 1)
+          console.log(`[WebSocket] Reconnecting in ${delay}ms (attempt ${globalReconnectAttempts}/${maxReconnectAttempts})`)
 
-          reconnectTimer = setTimeout(() => {
+          globalReconnectTimer = setTimeout(() => {
             connect()
           }, delay)
         }
       }
 
-      ws.onerror = (error) => {
+      globalWs.onerror = (error) => {
         status.value = 'error'
         console.error('[WebSocket] Error:', error)
       }
@@ -180,9 +178,9 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
    * Cleanup
    */
   function cleanup(): void {
-    if (pingInterval) {
-      clearInterval(pingInterval)
-      pingInterval = null
+    if (globalPingInterval) {
+      clearInterval(globalPingInterval)
+      globalPingInterval = null
     }
   }
 
@@ -190,17 +188,17 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
    * Disconnect
    */
   function disconnect(): void {
-    if (reconnectTimer) {
-      clearTimeout(reconnectTimer)
-      reconnectTimer = null
+    if (globalReconnectTimer) {
+      clearTimeout(globalReconnectTimer)
+      globalReconnectTimer = null
     }
 
     cleanup()
-    reconnectAttempts = maxReconnectAttempts // Prevents auto-reconnect
+    globalReconnectAttempts = maxReconnectAttempts // Prevents auto-reconnect
 
-    if (ws) {
-      ws.close()
-      ws = null
+    if (globalWs) {
+      globalWs.close()
+      globalWs = null
     }
 
     status.value = 'disconnected'
@@ -210,7 +208,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
    * Send message
    */
   function send<T>(type: ClientMessage['type'], payload: T): void {
-    if (ws?.readyState !== WebSocket.OPEN) {
+    if (globalWs?.readyState !== WebSocket.OPEN) {
       console.warn('[WebSocket] Cannot send message: not connected')
       return
     }
@@ -221,7 +219,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
       timestamp: Date.now(),
     }
 
-    ws.send(JSON.stringify(message))
+    globalWs.send(JSON.stringify(message))
   }
 
   /**
@@ -252,15 +250,15 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     on(type, wrappedHandler)
   }
 
-  // Auto-connect on mount
-  if (import.meta.client && autoConnect) {
+  // Auto-connect on mount (only once globally)
+  if (import.meta.client && autoConnect && !isInitialized) {
+    isInitialized = true
     onMounted(() => {
       connect()
     })
 
-    onUnmounted(() => {
-      disconnect()
-    })
+    // Note: We do NOT disconnect on unmount to preserve connection across page navigations
+    // The connection is managed globally and persists until the browser tab is closed
   }
 
   return {

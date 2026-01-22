@@ -74,6 +74,9 @@ function handleSubmit(): void {
         >
       </div>
 
+      <!-- Integration Settings (local only) -->
+      <IntegrationSettingsInline />
+
       <button
         type="submit"
         class="btn-primary w-full"

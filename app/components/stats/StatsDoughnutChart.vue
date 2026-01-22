@@ -5,14 +5,14 @@
  * Doughnut chart for consensus distribution using Chart.js.
  */
 
-import {
-    ArcElement,
-    Chart as ChartJS,
-    Legend,
-    Title,
-    Tooltip,
-} from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
+import {
+  ArcElement,
+  Chart as ChartJS,
+  Legend,
+  Title,
+  Tooltip,
+} from 'chart.js'
 
 // Register Chart.js components
 ChartJS.register(
