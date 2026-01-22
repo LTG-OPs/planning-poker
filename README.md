@@ -13,7 +13,7 @@ A modern Planning Poker tool for agile teams, built with Nuxt 4, TypeScript and 
 
 ## 🛠️ Technology Stack
 
-- **Framework**: [Nuxt 3](https://nuxt.com/) (v4 compatibility)
+- **Framework**: [Nuxt 4](https://nuxt.com/)
 - **Language**: TypeScript
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Package Manager**: [Bun](https://bun.sh/)
