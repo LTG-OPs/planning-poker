@@ -85,7 +85,7 @@ const chartOptions = computed(() => ({
       text: props.title,
       font: {
         size: 14,
-        weight: '600' as const,
+        weight: 'bold' as const,
       },
       color: '#374151',
     },
@@ -96,9 +96,10 @@ const chartOptions = computed(() => ({
       padding: 12,
       displayColors: false,
       callbacks: {
-        label: (context: { raw: number, dataIndex: number }) => {
+        label: (context: { raw: unknown, dataIndex: number }) => {
           const point = props.data[context.dataIndex]
-          return `${point?.label ?? ''}: ${context.raw.toFixed(1)} pts`
+          const value = typeof context.raw === 'number' ? context.raw : 0
+          return `${point?.label ?? ''}: ${value.toFixed(1)} pts`
         },
       },
     },

@@ -5,7 +5,6 @@
  * Doughnut chart for consensus distribution using Chart.js.
  */
 
-import { Doughnut } from 'vue-chartjs'
 import {
   ArcElement,
   Chart as ChartJS,
@@ -13,6 +12,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
+import { Doughnut } from 'vue-chartjs'
 
 // Register Chart.js components
 ChartJS.register(
@@ -96,7 +96,7 @@ const chartOptions = computed(() => ({
       text: props.title,
       font: {
         size: 14,
-        weight: '600' as const,
+        weight: 'bold' as const,
       },
       color: '#374151',
     },
@@ -107,9 +107,10 @@ const chartOptions = computed(() => ({
       padding: 12,
       displayColors: true,
       callbacks: {
-        label: (context: { raw: number }) => {
-          const percentage = total.value > 0 ? ((context.raw / total.value) * 100).toFixed(1) : 0
-          return ` ${context.raw} (${percentage}%)`
+        label: (context: { raw: unknown }) => {
+          const value = context.raw as number
+          const percentage = total.value > 0 ? ((value / total.value) * 100).toFixed(1) : 0
+          return ` ${value} (${percentage}%)`
         },
       },
     },

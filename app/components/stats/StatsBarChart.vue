@@ -5,7 +5,6 @@
  * Bar chart for card value frequency using Chart.js.
  */
 
-import { Bar } from 'vue-chartjs'
 import {
   BarElement,
   CategoryScale,
@@ -15,7 +14,10 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
+import { Bar } from 'vue-chartjs'
 import type { ICardFrequency } from '~/types/stats'
+
+
 
 // Register Chart.js components
 ChartJS.register(
@@ -95,7 +97,7 @@ const chartOptions = computed(() => ({
       text: props.title,
       font: {
         size: 14,
-        weight: '600' as const,
+        weight: 'bold' as const,
       },
       color: '#374151',
     },
@@ -106,8 +108,8 @@ const chartOptions = computed(() => ({
       padding: 12,
       displayColors: false,
       callbacks: {
-        label: (context: { raw: number, dataIndex: number }) => {
-          const item = props.data[context.dataIndex]
+        label: (context: { dataIndex: string | number; raw: unknown }) => {
+          const item = props.data[context.dataIndex as number]
           return `${context.raw}× (${item?.percentage.toFixed(1) ?? 0}%)`
         },
       },
@@ -121,7 +123,7 @@ const chartOptions = computed(() => ({
       ticks: {
         color: '#6b7280',
         font: {
-          weight: '600' as const,
+          weight: 'bold' as const,
         },
       },
     },
