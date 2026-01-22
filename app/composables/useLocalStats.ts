@@ -15,7 +15,7 @@ import type {
   IStoryStats,
   ITimeSeriesPoint,
 } from '~/types/stats'
-import { DEFAULT_STATS_STORAGE, STATS_STORAGE_KEY } from '~/types/stats'
+import { createDefaultStatsStorage, STATS_STORAGE_KEY } from '~/types/stats'
 import { aggregateCardFrequency, calculateConsensusDistribution, calculateQuickStats, createStoryStats as createStoryStatsCore } from '~/utils/statsCalculations'
 
 /**
@@ -24,8 +24,10 @@ import { aggregateCardFrequency, calculateConsensusDistribution, calculateQuickS
 export function useLocalStats() {
   /**
    * Reactive storage state
+   * Uses a factory function to create a fresh object for each initialization,
+   * avoiding shared mutable state issues with the exported constant.
    */
-  const storage = useState<ILocalStatsStorage>('localStats', () => DEFAULT_STATS_STORAGE)
+  const storage = useState<ILocalStatsStorage>('localStats', createDefaultStatsStorage)
 
   /**
    * Initialize storage from LocalStorage on client
@@ -246,7 +248,7 @@ export function useLocalStats() {
    * Clear all stats
    */
   function clearAllStats(): void {
-    storage.value = { ...DEFAULT_STATS_STORAGE }
+    storage.value = createDefaultStatsStorage()
     saveStorage()
   }
 

@@ -139,12 +139,25 @@ export interface ILocalStatsStorage {
 }
 
 /**
- * Default empty storage
+ * Default empty storage (deprecated - use createDefaultStatsStorage instead)
+ * @deprecated Use createDefaultStatsStorage() to avoid shared mutable state
  */
 export const DEFAULT_STATS_STORAGE: ILocalStatsStorage = {
   version: 1,
   sessions: {},
   lastUpdated: new Date(),
+}
+
+/**
+ * Factory function to create a fresh default storage object.
+ * This avoids shared mutable state issues with the constant.
+ */
+export function createDefaultStatsStorage(): ILocalStatsStorage {
+  return {
+    version: 1,
+    sessions: {},
+    lastUpdated: new Date(),
+  }
 }
 
 /**
