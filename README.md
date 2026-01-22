@@ -1,6 +1,6 @@
 # Planning Poker 🃏
 
-A modern Planning Poker tool for agile teams, built with Nuxt 3, TypeScript and Tailwind CSS.
+A modern Planning Poker tool for agile teams, built with Nuxt 4, TypeScript and Tailwind CSS.
 
 ## ✨ Features
 
