@@ -17,8 +17,6 @@ import {
 import { Bar } from 'vue-chartjs'
 import type { ICardFrequency } from '~/types/stats'
 
-
-
 // Register Chart.js components
 ChartJS.register(
   CategoryScale,
