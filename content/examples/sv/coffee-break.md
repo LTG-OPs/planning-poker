@@ -27,7 +27,7 @@ Det som uppskattas är inte en riktig user story och bör hanteras annorlunda.
 
 ---
 
-## Exempel 1: Pauss-signal
+## Exempel 1: Paus-signal
 
 **Situation:**
 Planeringssessionen har pågått i 90 minuter. På nästa story visar flera teammedlemmar ☕.
@@ -106,4 +106,4 @@ Teammedlemmen kan inte meningsfullt uppskatta storyn.
 
 - ☕ är ett **kommunikationsverktyg**, inte en uppskattning
 - Fråga alltid **varför** någon visar ☕
-- Ta pauss-signaler på allvar – trött team = dåliga uppskattningar
+- Ta paus-signaler på allvar – trött team = dåliga uppskattningar

@@ -139,10 +139,10 @@
   },
   "storyExamples": {
     "title": "Примеры историй",
-    "subtitle": "Справочные примеры для оценки story points",
+    "subtitle": "Справочные примеры для оценки Story Points",
     "selectPoints": "Выберите Story Points",
-    "selectPrompt": "Выберите значение story point слева, чтобы увидеть примеры.",
-    "points": "Очки истории",
+    "selectPrompt": "Выберите значение Story Points слева, чтобы увидеть примеры.",
+    "points": "Story Points",
     "riskLabel": "Риск",
     "hint": "Эти примеры служат ориентиром. Подстройте их под практики и домен вашей команды.",
     "close": "Закрыть",
@@ -155,7 +155,7 @@
     },
     "matrix": {
       "title": "Матрица риск‑сложность",
-      "subtitle": "Определяйте story points по соотношению риска и сложности",
+      "subtitle": "Определяйте Story Points по соотношению риска и сложности",
       "axis": {
         "risk": "Риск",
         "complexity": "Сложность"
@@ -321,7 +321,7 @@
     "quickStats": {
       "title": "Краткая сводка",
       "totalStories": "Всего историй",
-      "averagePoints": "Средние story points",
+      "averagePoints": "Средние Story Points",
       "consensusRate": "Доля консенсуса",
       "avgVoters": "Среднее число голосующих"
     },

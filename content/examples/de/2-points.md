@@ -16,7 +16,7 @@ Ein optionales Eingabefeld für die Telefonnummer soll zum Kontaktformular hinzu
 **Akzeptanzkriterien:**
 
 - [ ] Neues `phone`-Feld im Formular
-- [ ] Label: „Telefon (optional)"
+- [ ] Label: "Telefon (optional)"
 - [ ] Validierung: Nur Ziffern, +, -, Leerzeichen erlaubt
 - [ ] Feld wird ans Backend übermittelt
 
@@ -27,7 +27,7 @@ Ein optionales Eingabefeld für die Telefonnummer soll zum Kontaktformular hinzu
 **Titel:** Produktliste nach Preis sortieren
 
 **Beschreibung:**
-Eine Sortieroption „Preis aufsteigend/absteigend" soll zur Produktübersicht hinzugefügt werden.
+Eine Sortieroption "Preis aufsteigend/absteigend" soll zur Produktübersicht hinzugefügt werden.
 
 **Akzeptanzkriterien:**
 
@@ -42,11 +42,11 @@ Eine Sortieroption „Preis aufsteigend/absteigend" soll zur Produktübersicht h
 **Titel:** Bestätigungsdialog beim Löschen anzeigen
 
 **Beschreibung:**
-Vor dem Löschen eines Eintrags soll ein Modal erscheinen: „Sind Sie sicher, dass Sie löschen möchten?"
+Vor dem Löschen eines Eintrags soll ein Modal erscheinen: "Sind Sie sicher, dass Sie löschen möchten?"
 
 **Akzeptanzkriterien:**
 
-- [ ] Modal mit „Ja" / „Abbrechen"
+- [ ] Modal mit "Ja" / "Abbrechen"
 - [ ] Löschung nur bei Bestätigung
 - [ ] Modal kann mit ESC geschlossen werden
 
